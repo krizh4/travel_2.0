@@ -1,48 +1,88 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <script src="index.js"></script>
+    <link rel="stylesheet" href="../public/styles.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Home</title>
 </head>
 <body>
-    <nav class="navbar">
-        <span class="logo">LOGO</span>
-        <div class="nav-btn-g">
-            <a href=""><span>HOME</span></a>
-            <a href="/store"><span>STORE</span></a>
-            <a href="/explore"><span>EXPLORE</span></a>
+    <nav>
+        <!-- logo -->
+        <div class="logo"><h1>LOGO</h1></div>
+        <!-- links -->
+        <div class="links">
+            <ul>
+                <li><a href="">HOME</a></li>
+                <li><a href="">EXPLORE</a></li>
+                <li><a href="">STORE</a></li>
+            </ul>
         </div>
-        <a href="/profile"><img src="images/profile.png" alt="logo-profile"></a>
+        <!-- profile -->
+        <div class="profile"><a href=""><i class="fa-solid fa-user"></i></a></div>
     </nav>
-    <div class="promobar">
-        <span>Subscribe to our newsletter and get a 10% off Discount Coupen. <b>SUBSCRIBE NOW!</b></span>
+    <!-- tablet mode links-->
+    <div class="tlinks">
+        <ul>
+            <li><a href="">HOME</a></li>
+            <li><a href="">EXPLORE</a></li>
+            <li><a href="">STORE</a></li>
+        </ul>
     </div>
-    <div class="banner-container">
-        <div class="slider">
-            <div class="slide"></div>
-            <div class="slide"></div>
-            <div class="slide"></div>
-            <div class="slide"></div>
-            <div class="slide"></div>
+    <!-- subscribe -->
+    <div class="subs">
+        <h3>Subscribe to our newsletter and get a 10% off Discount coupen. <a href="">SUBSCRIBE NOW</a></h3>
+    </div>
+
+    <!--main content -->
+
+    <!--tablet mode right bar-->
+    <div class="trightbar">
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+            <div class="tcard"></div>
+    </div>
+    <div class="maincontent">
+        <!--left bar-->
+        <div class="leftbar">
+            <!--cards-->
+                <center><div class="cards">
+                    <div class="card">
+                        <img src="../public/images/ninearch.jpg" alt="">
+                        <div class="text">
+                            <h1>Nine Arches Bridge - Badulla</h1>
+                            <h2>kriz - 15:30 Today</h2>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="../public/images/ninearch.jpg" alt="">
+                        <div class="text">
+                            <h1>Nine Arches Bridge - Badulla</h1>
+                            <h2>kriz - 15:30 Today</h2>
+                        </div>
+                    </div>
+                </div></center>
         </div>
-        <div class="banner-head">
-            <span class="smaal-letters">Welcome to the</span><br><span>Traveler's Diary.</span>
+
+        <!--right bar-->
+        <div class="rightbar">
+            <!--cards-->
+            <center><div class="cards">
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+            </div></center>
         </div>
     </div>
-    <section class="sec-0">
-        <div class="blog-a">
-            <h2>Top Stories</h2>
-            <div class="blog-bord">
-                <div class="blog-card"></div>
-                <div class="blog-card"></div>
-                <div class="blog-card"></div>
-                <div class="blog-card"></div>
-            </div>
-        </div>
-    </section>
 </body>
 </html>
