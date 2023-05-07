@@ -59,6 +59,10 @@ body {
     color: #FFFFFF;
 }
 
+.nav-btn-g a {
+    text-decoration: none;
+}
+
 .navbar img {
     position: absolute;
     width: 58px;
@@ -199,4 +203,10 @@ body {
 
 .ad-space {
     background-color: #263637;
+    width: 100px;
+}
+
+.sec-0 {
+    margin: 0 10%;
+    display: grid;
 }
