@@ -4,4 +4,4 @@
 ```npm start```
 
 ## color guides
-![IMAGE_DESCRIPTION](https://ibb.co/gTJDsQG)
+![IMAGE_DESCRIPTION](https://i.ibb.co/NjKLwfX/Group-8.png)
