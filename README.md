@@ -1,4 +1,5 @@
 # travel_2.0
+![](https://img.shields.io/github/languages/code-size/krizh4/travel_2.0)
 
 ## How to Start
 rename the example.env to .env and add the mongo datatbase uri  
