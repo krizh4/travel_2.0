@@ -1,7 +1,7 @@
 # travel_2.0
 
 ## How to Start
-rename the example.env to .env and add the mongo datatbase uri
+rename the example.env to .env and add the mongo datatbase uri  
 ```npm start```
 
 ## color guides
