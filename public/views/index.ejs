@@ -55,23 +55,28 @@
         <!--left bar-->
         <div class="leftbar">
             <!--cards-->
-                <center><div class="cards">
-                    <div class="card">
-                        <img src="images/ninearch.jpg" alt="">
-                        <div class="text">
-                            <h1>Nine Arches Bridge - Badulla</h1>
-                            <h2>kriz - 15:30 Today</h2>
-                        </div>
-                    </div>
-                    <div class="card">
+                <center>
+                    <div class="cards"></div>
+                    <% for(let i = 0; i < data.length; i++) { %>
+                        <a href="/post/<%= data[i]._id %>" target="_blank" rel="noopener noreferrer">
+                            <div class="card">
+                                <img src="<%= data[i].image %>" alt="">
+                                <div class="text">
+                                    <h1><%= data[i].title %></h1>
+                                    <h2><%= data[i].desc %></h2>
+                                </div>
+                            </div>
+                        </a>
+                    <% } %>
+                    <!-- <div class="card"> -->
                         <!-- <img src="../public/images/ninearch.jpg" alt=""> -->
-                        <img src="images/ninearch.jpg" alt="">
+                        <!-- <img src="images/ninearch.jpg" alt="">
                         <div class="text">
                             <h1>Nine Arches Bridge - Badulla</h1>
                             <h2>kriz - 15:30 Today</h2>
                         </div>
-                    </div>
-                </div></center>
+                    </div> -->
+                </center>
         </div>
 
         <!--right bar-->

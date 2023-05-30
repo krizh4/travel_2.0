@@ -15,8 +15,6 @@ app.use(express.static(__dirname + '/public/static'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-db.run()
-
 app.get('/admin', (req, res) => {
   res.sendFile(__dirname + '/public/views/admin.html')
 }).post('/admin/:command/:type', (req, res) => {
@@ -38,8 +36,18 @@ app.get('/admin', (req, res) => {
   }
 })
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/views/index.html')
+app.get('/', async (req, res) => {
+  data = await db.getData();
+  console.log(data);
+  // res.sendFile(__dirname + '/public/views/index.html')
+  res.render(__dirname + '/public/views/index.ejs', {data})
+})
+
+app.get('/post/:blogID', async (req, res) => {
+  console.log(req.params.blogID);
+  data = await db.getData(req.params.blogID)
+  console.log(data);
+  res.render(__dirname + '/public/views/post.ejs', data)
 })
 
 app.get('/store', (req, res) => {

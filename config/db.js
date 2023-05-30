@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = process.env.MONGO_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -16,28 +16,50 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+    
+    // TESTIN AREA
+    // const database = client.db("TravelPageDatabase");
+    // const blogposts = database.collection("Blog Collection");
+
+    // const cursor = blogposts.find({});
+    // const allBlogs = await cursor.toArray();
+    
+
+    // console.log(allBlogs);    
+    // TESTING AREA
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } catch {
+  } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
     console.log("Closes");
   }
 }
 
-async function store() {
-  // Use connect method to connect to the server
-  await client.connect();
-  console.log('Connected successfully to server');
-  const db = client.db(dbName);
-  const collection = db.collection('documents');
+async function getData(query) {
+    try {
+        const database = client.db("TravelPageDatabase");
+        const blogposts = database.collection("Blog Collection");
+        
+        if (query){
+          console.log("Running on Query");
+          const allBlogs = await blogposts.findOne({_id: new ObjectId(query)});
+          return allBlogs
+        } else {
+          console.log("Running on Else");
+          const cursor = blogposts.find({});
+          const allBlogs = await cursor.toArray();
+          return allBlogs;
+        }
+    } finally {
+        console.log("hello World");
+    }
 
-  // the following code examples can be pasted here...
-
-  return 'done.';
 }
 
-module.exports = { run };
+exports.run = run;
+exports.getData = getData;
 
 // run().catch(console.dir);
