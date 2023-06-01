@@ -7,7 +7,7 @@ body{
 
 .userinfo{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
     grid-column-gap: 2rem;
     padding: 20px;
     width: 80%;
@@ -43,8 +43,16 @@ body{
     padding: 10px;
     border-radius: 50%;
     margin-top: 5%;
+    color: white;
 }
-
+.userinfo .logout_n_new a{
+    font-size: 25px;
+    background-color: green;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    color: white;
+}
 .userinfo_tablet{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -134,6 +142,15 @@ body{
         border-radius: 5px;
         margin-left: 5%;
     }
+    .userinfo_tablet .logout_add li a#home{
+        text-decoration: none;
+        background-color: green;
+        padding: 5px;
+        color: white;
+        font-weight: 700;
+        border-radius: 5px;
+        margin-left: 0;
+    }
     .userinfo_tablet .logout_add li button{
         background-color: red;
         padding: 5px;
@@ -143,7 +160,6 @@ body{
         border: none;
         padding-right: 20px;
         font-size: 16px;
-        text-align: center;
     }
 }
 
