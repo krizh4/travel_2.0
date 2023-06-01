@@ -1,0 +1,39 @@
+*{margin: 0;padding: 0;}
+
+body{
+    background-size: auto;
+    background-image: linear-gradient(90deg,#334344,#5d6d6e);
+}
+
+form{
+    margin-top: 10%;
+    width: 50%;
+    background-color: aliceblue;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-shadow: 1px 1px 8px black;
+}
+form input#field{
+    width: 70%;
+    height: 20px;
+    border-top: none;
+    border-left: none;
+    border-right:none ;
+    background-color: aliceblue;
+    margin-top: 2px;
+    outline: none;
+}
+
+form button{
+    font-size: 16px;
+    padding: 5px;
+}
+@media(max-width:768px){
+    form{
+        width: 80%;
+    }
+    form input#field{
+        width: 80%;
+    }
+}
