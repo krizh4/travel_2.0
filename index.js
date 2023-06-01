@@ -91,11 +91,35 @@ app.post('/logout', (req, res) => {
   res.json({ message: 'Logout successful' });
 })
 
-app.get('/newpost', checkAdmin, (req, res) => {
+app.get('/newpost', checkAdmin, checkVerified, (req, res) => {
   res.sendFile(__dirname + '/public/views/addpost.html')
 }).post('/newpost', checkAdmin, db.createPost, (req,res) => {
   res.send("Post Created!")
 })
+
+// API endpoint for email verification
+app.get('/verify/:verToken', async (req, res) => {
+  const token = req.cookies.token;
+  const { verToken } = req.params;
+
+  // Retrieve the stored hashed token for the user
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const storedHashedToken = decoded.verificationCode; // Retrieve from your database
+
+  // Compare the token with the stored hashed token
+  const isTokenValid = await bcrypt.compare(verToken, storedHashedToken);
+
+  if (isTokenValid) {
+    // Perform necessary database updates or business logic
+    db.setVerified(decoded._id)
+    // Respond with a success message
+    res.send('Email verified successfully!');
+  } else {
+    // Handle invalid token case
+    res.status(400).send('Invalid token');
+  }
+});
+
 
 // Middleware Functions
 function checkAdmin(req, res, next) {
@@ -134,5 +158,23 @@ async function checkUser(req, res, next) {
   }
 }
 
+async function checkVerified(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    res.status(401).send('Unauthorized Check Your email dumb mf');
+  } else {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.isVerified) {
+        next()
+      } else {
+        res.status(401).send('Unauthorized <a href="/login">Go login<a>');
+      }
+    } catch (error) {
+      console.error('Error during token verification:', error);
+      res.status(401).send('Unauthorized');
+    }
+  }
+}
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

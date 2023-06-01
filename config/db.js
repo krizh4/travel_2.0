@@ -9,9 +9,6 @@ const SiteModels = require('../models/sitemodels')
 
 const mongoose = require('mongoose');
 
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SGAPI_KEY);
-
 async function run() {
   mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -81,12 +78,16 @@ async function register(req, res, next) {
     const newUser = new UserModels.User({
       name: username,
       email: email,
-      password: hashedPassword
+      password: hashedPassword,
     })
 
     newUser.save()
-      .then(() => {
-        console.log('User saved to the database');
+      .then(async (user) => {
+        console.log('User saved to the database', user);
+        verToken = await verificationToken(user)
+        const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin, verificationCode: verToken}, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('token', token, { httpOnly: true, secure: true })
+        sendVerificationEmail(user.email, verToken);
         next()
       })
       .catch((error) => {
@@ -156,9 +157,70 @@ async function createPost(req, res, next) {
   }
 }
 
+async function setVerified(userId){
+  try {
+    UserModels.User.findOneAndUpdate({ _id: userId }, { isVerified: true }, { new: true })
+    .then(updatedUser => {
+      if (updatedUser) {
+        user = updatedUser;
+        const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('token', token, { httpOnly: true, secure: true })
+        console.log('User updated successfully:', updatedUser);
+      } else {
+        console.log('User not found');
+      }
+    })
+    .catch(error => {
+      console.error('Error updating user:', error);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Email Verification
+const nodemailer = require('nodemailer');
+
+// Create the transporter
+const transporter = nodemailer.createTransport({
+  host: 'smtp.ethereal.email',
+  port: 587,
+  auth: {
+      user: 'horacio.mccullough@ethereal.email',
+      pass: 'A7vj7ZCeAk3cJrwhhK'
+  }
+});
+
+// Generate a verification token
+const generateVerificationToken = async (user) => {
+  const uniqueValue = Date.now() + user.id;
+  const token = await bcrypt.hash(uniqueValue.toString(), 10);
+  return token;
+};
+
+const verificationToken = generateVerificationToken;
+
+const sendVerificationEmail = (email, token) => {
+  const mailOptions = {
+    from: 'horacio.mccullough@ethereal.email',
+    to: email,
+    subject: 'Email Verification',
+    text: `Please click on the following link to verify your email: localhost:3000/verify/${token}`
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Verification email sent: ' + info.response);
+    }
+  });
+};
+
 exports.run = run;
 exports.getData = getData;
 exports.register = register;
 exports.login = login;
 exports.createPost = createPost;
 exports.getOne = getOne;
+exports.setVerified = setVerified;
