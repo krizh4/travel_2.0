@@ -3,12 +3,11 @@ require('dotenv').config();
 const express = require('express')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// const SiteModels = require('./models/sitemodels')
-const db = require('./config/db');
+const { run, getData, createPost, getOne } = require('./config/db');
+const { register, login, setVerified, verifyEmail } = require('./config/auth');
 
 const app = express()
 const port = process.env.PORT || 8000
@@ -19,9 +18,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-db.run()
+run()
 
 // Route Handleing
+// Admin Route
 app.get('/admin', (req, res) => {
   res.sendFile(__dirname + '/public/views/admin.html')
 }).post('/admin/:command/:type', (req, res) => {
@@ -43,76 +43,74 @@ app.get('/admin', (req, res) => {
   }
 })
 
-app.get('/', db.getData,(req, res) => {
-  // data = await db.getData();
-  // console.log(data);
-  // res.sendFile(__dirname + '/public/views/index.html')
+// Index Route
+app.get('/', getData,(req, res) => {
   req.refresh = 1;
   data = req.data
   res.render(__dirname + '/public/views/index.ejs', {data})
 })
 
-app.get('/post/:ID', db.getOne, (req, res) => {
-  // console.log(req.params.blogID);
-  // data = await db.getData(req.params.blogID)
-  // console.log(data);
+// Individual Post Route
+app.get('/post/:ID', getOne, (req, res) => {
   data = req.data;
   res.render(__dirname + '/public/views/post.ejs', data)
 })
 
-app.get('/store', (req, res) => {
+// Store Route {not devloped yet}
+app.get('/store', checkVerified, (req, res) => {
   res.sendFile(__dirname + '/public/views/store.html')
 })
 
+// Explore Route {not devloped yet}
 app.get('/explore', (req, res) => {
   res.sendFile(__dirname + '/public/views/explore.html')
 })
 
 app.get('/profile', checkUser, (req, res) => {
-  // const token = req.cookies.token;
-  // db.checkUser(token, res)
   res.render('../public/views/profile.ejs', data);
 })
 
 app.get('/register', (req, res) => {
   res.sendFile(__dirname + '/public/views/register.html')
-}).post('/register', db.register ,(req, res) => {
-  res.send("Registration Succesful, Go login")
+}).post('/register', register ,(req, res) => {
+  res.send("Registration Succesful <a href='/'>Go Back to Home</a>")
 })
 
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/public/views/login.html');
-}).post('/login', db.login, (req, res) => {
+}).post('/login', login, (req, res) => {
   res.redirect('/profile')
 })
 
 app.post('/logout', (req, res) => {
   res.cookie('token', '', { expires: new Date(0) });
-  res.json({ message: 'Logout successful' });
+  res.send('Logout successful');
 })
 
-app.get('/newpost', checkAdmin, checkVerified, (req, res) => {
+app.get('/newpost', checkAdmin, (req, res) => {
   res.sendFile(__dirname + '/public/views/addpost.html')
-}).post('/newpost', checkAdmin, db.createPost, (req,res) => {
+}).post('/newpost', checkAdmin, createPost, (req,res) => {
   res.send("Post Created!")
 })
 
 // API endpoint for email verification
-app.get('/verify/:verToken', async (req, res) => {
-  const token = req.cookies.token;
-  const { verToken } = req.params;
+app.get('/verify', async (req, res) => {
+  let token = req.cookies.token;
+  const { verToken } = req.query;
 
   // Retrieve the stored hashed token for the user
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET);
   const storedHashedToken = decoded.verificationCode; // Retrieve from your database
 
   // Compare the token with the stored hashed token
-  const isTokenValid = await bcrypt.compare(verToken, storedHashedToken);
+  const isTokenValid = (verToken == storedHashedToken);
+  console.log(verToken, storedHashedToken);
 
   if (isTokenValid) {
     // Perform necessary database updates or business logic
-    db.setVerified(decoded._id)
+    token = await setVerified(decoded.userId)
     // Respond with a success message
+    res.cookie('token', token, { httpOnly: true, secure: true })
     res.send('Email verified successfully!');
   } else {
     // Handle invalid token case
@@ -148,7 +146,7 @@ async function checkUser(req, res, next) {
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded.name);
+      console.log(decoded);
       data = {name: decoded.name};
       next()
     } catch (error) {
