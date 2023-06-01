@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/krizh4/travel_2.0#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
