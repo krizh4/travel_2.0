@@ -21,7 +21,7 @@ async function getData(req, res, next) {
       .limit(5)
       .exec();
 
-    console.log(results);
+    // console.log(results);
     req.data = results;
     if (req.refresh) {
       req.refresh += 1;
@@ -38,7 +38,7 @@ async function getOne(req, res, next) {
     query = req.params.ID
     const results = await SiteModels.Post.findOne({ _id: query })
 
-    console.log(results);
+    // console.log(results);
     req.data = results;
     next();
   } catch (err) {
@@ -103,7 +103,7 @@ async function checkUser(email) {
 
 async function changeVerified(userId) {
   const updatedUser = await UserModels.User.findOneAndUpdate({ _id: userId }, { isVerified: true }, { new: true })
-  console.log(updatedUser);
+  // console.log(updatedUser);
   return updatedUser
 }
 

@@ -20,7 +20,6 @@ async function register(req, res, next) {
         verToken = await verificationToken(user);
         const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin, verificationCode: verToken }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.cookie('token', token, { httpOnly: true, secure: true });
-        console.log(verToken);
     
         sendVerificationEmail(user.email, verToken);
         next()
@@ -66,8 +65,8 @@ async function setVerified(userId) {
     if (updatedUser) {
       user = updatedUser;
       const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin, verificationCode: user.verificationCode, isVerified: user.isVerified }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      // res.cookie('token', token, { httpOnly: true, secure: true })
-      console.log('User updated successfully:', updatedUser);
+      
+      // console.log('User updated successfully:', updatedUser);
       return token;
     } else {
       console.log('User not found');
@@ -79,19 +78,22 @@ async function setVerified(userId) {
 
 // Email Verification
 const verifyEmail = async (user) => {
+  user = await checkUser(user.email)
   verToken = await verificationToken(user)
   const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin, verificationCode: verToken, isVerified: user.isVerified }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.cookie('token', token, { httpOnly: true, secure: true })
-  console.log('User updated successfully:', updatedUser);
+  
+  await sendVerificationEmail(user.email, verToken);
+  
+  return token;
 }
 
 // Create the transporter
 const transporter = nodemailer.createTransport({
-  host: 'smtp-relay.sendinblue.com',
+  host: process.env.SMTP_HOST,
   port: 587,
   auth: {
-      user: 'testtruecall50@gmail.com',
-      pass: 'ctALGwHJpF8nZgEv'
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
   }
 });
 
@@ -105,10 +107,11 @@ const verificationToken = generateVerificationToken;
 
 const sendVerificationEmail = (email, token) => {
   const mailOptions = {
-    from: 'travel2.0@travel.com',
+    from: 'noreply@travel.com',
     to: email,
-    subject: 'Email Verification',
-    text: `Please click on the following link to verify your email: localhost:3000/verify?verToken=${token}` //make Query itll be easy
+    subject: 'Email Verification - Travel 2.0',
+    text: `Please click on the following link to verify your email:`, //make Query itll be easy
+    html: `<a href="localhost:3000/verify?verToken=${token}">Click Here</a> to Verify your Email`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

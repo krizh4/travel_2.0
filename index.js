@@ -22,19 +22,11 @@ run()
 
 // Route Handleing
 // Admin Route
-app.get('/admin', (req, res) => {
+app.get('/admin', checkUser, checkVerified, checkAdmin, (req, res) => {
   res.sendFile(__dirname + '/public/views/admin.html')
 }).post('/admin/:command/:type', (req, res) => {
   if (req.params.command == 'add'){
     if (req.params.type == 'post'){
-
-      // SiteModels.Post({
-      //   title: req.body.post_name,
-      //   desc: req.body.post_desc
-      // }).save((err, data) => {
-      //   if (err) return console.log(err._message);
-      //   console.log(`> ${data.title} created Successfully`);
-      // });
     } else if (req.params.type == 'place'){
       console.log("place");
     } else {
@@ -118,19 +110,29 @@ app.get('/verify', async (req, res) => {
   }
 });
 
+app.get('/email-verification', async (req, res) => {
+  let token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  token = await verifyEmail(decoded)
+
+  res.cookie('token', token, { httpOnly: true, secure: true })
+  res.send("Please Check Your Emails")
+})
+
 
 // Middleware Functions
+// Check if user is a Admin
 function checkAdmin(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    res.status(401).send('Unauthorized');
+    res.status(401).send('Unauthorized <a href="/login">Go login<a>');
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       if (decoded.isAdmin) {
         next()
       } else {
-        res.status(401).send('Unauthorized');
+        res.status(401).send('Unauthorized (Uba admin nemei)');
       }
     } catch (error) {
       console.error('Error during token verification:', error);
@@ -139,15 +141,16 @@ function checkAdmin(req, res, next) {
   }
 }
 
+// Check if user is logged
 async function checkUser(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    res.status(401).send('Unauthorized <a href="/login">Go login<a>');
+    res.status(401).send('Unauthorized <a href="/login">Go login<a> (Log in Wela idpn)');
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded);
-      data = {name: decoded.name};
+      // console.log(decoded);
+      data = decoded;
       next()
     } catch (error) {
       console.error('Error during token verification:', error);
@@ -156,17 +159,18 @@ async function checkUser(req, res, next) {
   }
 }
 
+// Check if user is verified
 async function checkVerified(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    res.status(401).send('Unauthorized Check Your email dumb mf');
+    res.status(401).send('Unauthorized <a href="/login">Go login<a>');
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       if (decoded.isVerified) {
         next()
       } else {
-        res.status(401).send('Unauthorized <a href="/login">Go login<a>');
+        res.status(401).send('Unauthorized Check your email Dumb mf');
       }
     } catch (error) {
       console.error('Error during token verification:', error);

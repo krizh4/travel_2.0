@@ -16,8 +16,11 @@
         </div>
         <div class="text">
             <h2><%= data.name %></h2>
-            <h3>andunsasmitha@gmail.com</h3><br>
+            <h3><%= data.email %></h3><br>
             <a href="/newpost">Create New Post</a>
+            <% if (!data.isVerified) { %>
+                <a href="/email-verification">Verify Email</a>
+            <% } %>
         </div>
         <div class="logout_n_new">
             <form action="/logout" method="post">
