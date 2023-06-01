@@ -5,14 +5,73 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Profile</title>
 </head>
 <body>
-    <h1 style="text-align: center; margin: auto;">this is profile page</h1>
-    <h2>Welcome, <%= data.name %></h2>
+    <!--<h1 style="text-align: center; margin: auto;">profile page</h1>-->
+    <center><div class="userinfo">
+        <div class="icon">
+            <i class="fa-solid fa-circle-user"></i>
+        </div>
+        <div class="text">
+            <h2><%= data.name %></h2>
+            <h3>andunsasmitha@gmail.com</h3><br>
+            <a href="/newpost">Create New Post</a>
+        </div>
+        <div class="logout_n_new">
+            <form action="/logout" method="post">
+                <button type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </form>
+        </div>
+    </div></center>
+
+    <div class="userinfo_tablet">
+        <div class="icon_text">
+            <i class="fa-solid fa-circle-user"></i>
+            <h2><%= data.name %></h2>
+            <h3>andunsasmitha@gmail.com</h3><br>
+        </div>
+        <div class="logout_add">
+            <form action="/logout" method="post">
+                <li><a href="/newpost">Create New Post</a></li>
+                <li><button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Log out</button></li>
+            </form>
+        </div>
+    </div>
+
+    <center><div class="userpost">
+        <div class="post">
+            <img src="https://wowiwalkers.com/wp-content/uploads/2023/02/Header_Colombo_Sri-Lanka_Blog.jpg" alt="image">
+            <div class="posttxt">
+                <h3>colombo</h3>
+                <p>Mahinda mahattaya lives here</p>
+                <button>Delete</button>
+            </div>
+        </div>
+        <div class="post">
+            <img src="https://www.asgam.com/wp-content/uploads/2022/11/lotus-tower.jpg" alt="image">
+            <div class="posttxt">
+                <h3>colombo</h3>
+                <p>Mahinda mahattaya lives here</p>
+                <button>Delete</button>
+            </div>
+        </div>
+        <div class="post">
+            <img src="https://www.asgam.com/wp-content/uploads/2022/11/lotus-tower.jpg" alt="image">
+            <div class="posttxt">
+                <h3>colombo</h3>
+                <p>Mahinda mahattaya lives here</p>
+                <button>Delete</button>
+            </div>
+        </div>
+    </div></center>
+
+
+    <!--<h2>Welcome, <%= data.name %></h2> 
     <form action="/logout" method="post">
         <button type="submit">Logout</button>
     </form>
-    <a href="/newpost">Create New Post</a>
+    <a href="/newpost">Create New Post</a>-->
 </body>
 </html>
