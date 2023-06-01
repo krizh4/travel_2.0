@@ -8,5 +8,10 @@
 </head>
 <body>
     <h1 style="text-align: center; margin: auto;">this is profile page</h1>
+    <h2>Welcome, <%= data.name %></h2>
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+    <a href="/newpost">Create New Post</a>
 </body>
 </html>

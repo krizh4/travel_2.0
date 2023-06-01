@@ -1,11 +1,14 @@
-// const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-// const UserSchema = new Schema({
-//     name: { type: String},
-//     email: { type: String },
-//     phone: { type: Number},
-// })
+const Schema = mongoose.Schema;
 
-// const User = mongoose.model('Travel20_Users', UserSchema)
-// exports.User = User;
+const UserSchema = new Schema({
+    name: { type: String},
+    email: { type: String, required: true},
+    // phone: { type: Number},
+    password: { type: String, required: true},
+    isAdmin: {type: Boolean, default: false, immutable: true},
+})
+
+const User = mongoose.model('User', UserSchema)
+exports.User = User;

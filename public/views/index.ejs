@@ -21,7 +21,7 @@
             </ul>
         </div>
         <!-- profile -->
-        <div class="profile"><a href=""><i class="fa-solid fa-user"></i></a></div>
+        <div class="profile"><a href="/profile"><i class="fa-solid fa-user"></i></a></div>
     </nav>
     <!-- tablet mode links-->
     <div class="tlinks">
@@ -60,7 +60,7 @@
                     <% for(let i = 0; i < data.length; i++) { %>
                         <a href="/post/<%= data[i]._id %>" target="_blank" rel="noopener noreferrer">
                             <div class="card">
-                                <img src="<%= data[i].image %>" alt="">
+                                <img src="<%= data[i].media[0].link %>" alt="<%= data[i].media[0].alt %>">
                                 <div class="text">
                                     <h1><%= data[i].title %></h1>
                                     <h2><%= data[i].desc %></h2>
