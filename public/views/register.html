@@ -7,23 +7,22 @@
     <link rel="stylesheet" href="register.css">
     <title>Register</title>
     <style>
-        section {
+        /*section {
             padding: 30px;
-        }
+        }*/
     </style>
 </head>
 <body>
-    <form action="/register" method="post">
-        <section>
-            <label for="username">Username: <input name="username" type="text" placeholder="Username"></label>
-        </section>
-        <section>
-            <label for="password">Password: <input name="password" type="password" placeholder="Password"></label>
-        </section>
-        <section>
-            <label for="email">Email: <input type="email" name="email" placeholder="Email"></label>
-        </section>
-        <button type="submit">submit</button>
-    </form>
+    <center><form action="/register" method="post">
+            <h1>Register</h1><br><br>
+
+            <h3>Username</h3>
+            <input id="field" name="username" type="text" placeholder="Username"><br><br>
+            <h3>Password</h3>
+            <input id="field" name="password" type="password" placeholder="Password"><br><br>
+            <h3>Email</h3>
+            <input id="field" type="email" name="email" placeholder="Email"><br><br>
+            <button type="submit">submit</button>
+    </form></center>
 </body>
 </html>
