@@ -7,6 +7,8 @@ nav{
     grid-template-columns: 1fr 2fr 1fr;
     background-image: linear-gradient(90deg,#334344,#5d6d6e);
     padding: 25px;
+    position: sticky;
+    top: 0;
 }
 nav .logo{
     text-align: center;
@@ -159,6 +161,8 @@ nav .profile a{
     }
     .tlinks{
         display: block;
+        position: sticky;
+        top: 70px;
     }
     .subs{
         font-size: 14px;
