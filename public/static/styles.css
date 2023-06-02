@@ -161,6 +161,8 @@ nav .profile a{
     }
     .tlinks{
         display: block;
+        position: sticky;
+        top: 70px;
     }
     .subs{
         font-size: 14px;
