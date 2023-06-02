@@ -2,6 +2,7 @@ const UserModels = require('../models/usermodel');
 const SiteModels = require('../models/sitemodels')
 
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 async function run() {
   mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -49,9 +50,12 @@ async function getOne(req, res, next) {
 
 async function createPost(req, res, next) {
   try {
+    token = await req.cookies.token
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
     const newPost = new SiteModels.Post({
       title: req.body.title,
       desc: req.body.text,
+      author: decoded, //Make Author for posts
       media: {
         link: req.body.image,
         alt: req.body.alt,

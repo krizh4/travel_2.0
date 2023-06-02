@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="add.css">
     <title>Post</title>
 </head>
+
 <body>
     <form action="" method="post">
         <section>
@@ -14,7 +16,7 @@
             <label for="">Description: <input type="text" name="text"></label>
         </section>
         <section>
-            <label for="">ImageLink: <input type="text" name="image"></label>
+            <label for="">ImageLink: <input type="text" name="image" id="imageLinkInput"></label>
             <label for="">ImageAlt: <input type="text" name="alt"></label>
         </section>
         <section>
@@ -23,5 +25,38 @@
         </section>
         <button type="submit">submit</button>
     </form>
+
+    <!-- Testing Area  -->
+    <h1>Image Upload</h1>
+    <input type="file" id="imageInput">
+    <button onclick="uploadImage()">Upload</button>
+
+    <div id="imageLink"></div>
+    <script>
+        function uploadImage() {
+            var input = document.getElementById('imageInput');
+            var file = input.files[0];
+
+            var formData = new FormData();
+            formData.append('image', file);
+
+            fetch('https://api.imgbb.com/1/upload?key=7953516942a734960e485a41a9a13827', {
+                method: 'POST',
+                body: formData
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    var imageLinkDiv = document.getElementById('imageLink');
+                    document.getElementById("imageLinkInput").value = data.data.url
+                    imageLinkDiv.innerHTML = `<a href="${data.data.url}" target="_blank"><img style="height: 400px;" src="${data.data.url}" alt=""></a>`;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 </body>
+
 </html>
