@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { run, getData, createPost, getOne } = require('./config/db');
+const { run, getData, createPost, getOne, getProfileData } = require('./config/db');
 const { register, login, setVerified, verifyEmail } = require('./config/auth');
 
 const app = express()
@@ -58,7 +58,9 @@ app.get('/explore', (req, res) => {
   res.sendFile(__dirname + '/public/views/explore.html')
 })
 
-app.get('/profile', checkUser, (req, res) => {
+app.get('/profile', checkUser, getProfileData, (req, res) => {
+  data.push(req.data);
+  console.log(data);
   res.render('../public/views/profile.ejs', data);
 })
 
@@ -150,9 +152,12 @@ async function checkUser(req, res, next) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       // console.log(decoded);
-      data = decoded;
+      data = [decoded];
       next()
     } catch (error) {
+      if (error.name == 'TokenExpiredError') {
+        res.status(401).send('Unauthorized <a href="/login">Go login<a> (Token Eka expired)');
+      }
       console.error('Error during token verification:', error);
       res.status(401).send('Unauthorized');
     }

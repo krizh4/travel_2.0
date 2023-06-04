@@ -17,7 +17,7 @@ async function run() {
 async function getData(req, res, next) {
   try {
     const results = await SiteModels.Post.find()
-      .sort({ createdAt: -1 })
+      .sort({date: -1}) // { createdAt: -1 }
       .skip(req.refresh || 0)
       .limit(5)
       .exec();
@@ -27,6 +27,27 @@ async function getData(req, res, next) {
     if (req.refresh) {
       req.refresh += 1;
     }
+    next();
+  } catch (err) {
+    console.error(err);
+    next();
+  }
+}
+
+async function getProfileData(req, res, next) {
+  try {
+    token = req.cookies.token
+    decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    // const results = await SiteModels.Post.find({author: {email: decoded.email}})
+    const results = await SiteModels.Post.find({ 'author.email': decoded.email})
+      .sort({date: -1}) // { createdAt: -1 }
+      .skip(req.refresh || 0)
+      .limit(5)
+      .exec();
+
+    // console.log(results);
+    req.data = results;
+    console.log(results);
     next();
   } catch (err) {
     console.error(err);
@@ -56,6 +77,7 @@ async function createPost(req, res, next) {
       title: req.body.title,
       desc: req.body.text,
       author: decoded, //Make Author for posts
+      date: new Date(),
       media: {
         link: req.body.image,
         alt: req.body.alt,
@@ -117,6 +139,7 @@ module.exports = {
   getData,
   createPost,
   getOne,
+  getProfileData,
   createUser, // For Auth
   checkUser,  // For Auth
   changeVerified, // For Auth

@@ -15,10 +15,10 @@
             <i class="fa-solid fa-circle-user"></i>
         </div>
         <div class="text">
-            <h2><%= data.name %></h2>
-            <h3><%= data.email %></h3><br>
+            <h2><%= data[0].name %></h2>
+            <h3><%= data[0].email %></h3><br>
             <a href="/newpost">Create New Post</a>
-            <% if (!data.isVerified) { %>
+            <% if (!data[0].isVerified) { %>
                 <a href="/email-verification">Verify Email</a>
             <% } %>
         </div>
@@ -33,8 +33,8 @@
     <div class="userinfo_tablet">
         <div class="icon_text">
             <i class="fa-solid fa-circle-user"></i>
-            <h2><%= data.name %></h2>
-            <h3>andunsasmitha@gmail.com</h3><br>
+            <h2><%= data[0].name %></h2>
+            <h3><%= data[0].email %></h3><br>
         </div>
         <div class="logout_add">
             <form action="/logout" method="post">
@@ -46,30 +46,18 @@
     </div>
 
     <center><div class="userpost">
-        <div class="post">
-            <img src="https://wowiwalkers.com/wp-content/uploads/2023/02/Header_Colombo_Sri-Lanka_Blog.jpg" alt="image">
-            <div class="posttxt">
-                <h3>colombo</h3>
-                <p>Mahinda mahattaya lives here</p>
-                <button>Delete</button>
-            </div>
-        </div>
-        <div class="post">
-            <img src="https://www.asgam.com/wp-content/uploads/2022/11/lotus-tower.jpg" alt="image">
-            <div class="posttxt">
-                <h3>colombo</h3>
-                <p>Mahinda mahattaya lives here</p>
-                <button>Delete</button>
-            </div>
-        </div>
-        <div class="post">
-            <img src="https://www.asgam.com/wp-content/uploads/2022/11/lotus-tower.jpg" alt="image">
-            <div class="posttxt">
-                <h3>colombo</h3>
-                <p>Mahinda mahattaya lives here</p>
-                <button>Delete</button>
-            </div>
-        </div>
+        <% for(let i = 0; i < data[1].length; i++) { %>
+            <a href="/post/<%= data[1][i]._id %>" target="_blank" rel="noopener noreferrer">
+                <div class="post">
+                    <img src="<%= data[1][i].media[0].link %>" alt="image">
+                    <div class="posttxt">
+                        <h3><%= data[1][i].title %></h3>
+                        <p><%= data[1][i].desc %></p>
+                        <button>Delete</button>
+                    </div>
+                </div>
+            </a>
+        <% } %>
     </div></center>
 
 

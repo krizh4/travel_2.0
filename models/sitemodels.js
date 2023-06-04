@@ -15,6 +15,7 @@ const PostSchema = new Schema({
     title: {type: String, required: true},
     desc: {type: String, required: true},
     author: {type: {}, required: true},
+    date: {type: Date, required: true},
     media: {type: [MediaSchema]},
     metrics: {type: MetricSchema},
     tags: {type: []},
