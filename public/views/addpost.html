@@ -6,11 +6,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="add.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Post</title>
 </head>
 
 <body>
-    <form action="" method="post">
+    <div class="content">
+        <h1>Create a new post</h1><br><hr><br>
+        <div class="maincontent">
+            <div class="imgupload">
+                <div id="imageLink"><img src="https://dev.ekkomedia.com/uploads/4866d635ea7b0ed8e2452da897143528/2023_01_05/1200/630/1672930058.7f3f77cf273f057a75af5c5753a649cf_thumb.0000001.jpg" alt=""></div>
+                <input type="file" id="imageInput" data-icoNname="fa-sharp fa-solid fa-upload">
+                <button onclick="uploadImage()"><i class="fa-sharp fa-solid fa-upload"></i></button>
+            </div>
+    
+            <form action="" method="post">
+                <section>
+                    <h4>Title</h4><input type="text" name="title"><br>
+                    <h4>Description</h4><input type="text" name="text"><br>
+                </section>
+                <section>
+                    <h4>ImageLink</h4><input type="text" name="image" id="imageLinkInput"><br>
+                    <h4>ImageAlt</h4><input type="text" name="alt"><br>
+                </section>
+                <section>
+                    <h4>Tags[a,b,c]</h4><input type="text" name="tags"><br>
+                    <h4>Location</h4><input type="text" name="location"><br><br>
+                </section>
+                <button type="submit">Post</button><br>
+            </form>
+        </div>
+    </div>
+    <!--<form action="" method="post">
         <section>
             <label for="">Title: <input type="text" name="title"></label>
             <label for="">Description: <input type="text" name="text"></label>
@@ -24,14 +51,16 @@
             <label for="">Location: <input type="text" name="location"></label>
         </section>
         <button type="submit">submit</button>
-    </form>
+    </form>-->
 
     <!-- Testing Area  -->
-    <h1>Image Upload</h1>
+
+    <!--<h1>Image Upload</h1>
     <input type="file" id="imageInput">
     <button onclick="uploadImage()">Upload</button>
+    <div id="imageLink"></div>-->
 
-    <div id="imageLink"></div>
+    
     <script>
         function uploadImage() {
             var input = document.getElementById('imageInput');

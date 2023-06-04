@@ -4,15 +4,20 @@ body{
     background-size: auto;
     background-image: linear-gradient(90deg,#334344,#5d6d6e);
 }
-
+html{
+    height: 100%;
+}
 form{
-    margin-top: 10%;
     width: 50%;
     background-color: aliceblue;
     padding: 10px;
     border-radius: 10px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     box-shadow: 1px 1px 8px black;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
 }
 form input#field{
     width: 70%;
@@ -34,6 +39,6 @@ form button{
         width: 80%;
     }
     form input#field{
-        width: 80%;
+        width: 95%;
     }
 }
