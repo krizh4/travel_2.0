@@ -86,6 +86,8 @@ nav .profile a{
     grid-template-columns: 2fr 1fr;
     margin-top: 3%;
     grid-column-gap: 1fr;
+    margin-left: 8%;
+    margin-right: 8%;
 }
 
 .leftbar{
@@ -110,7 +112,10 @@ nav .profile a{
     padding: 20px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
+.leftbar a{
+    text-decoration: none;
+    color: black;
+}
 .rightbar{
     text-align: center;
     margin-right: 10%;
@@ -142,6 +147,12 @@ nav .profile a{
     border-radius: 10px;
     margin-right: 20px;
 }
+
+@media(max-width:1024px){
+    .leftbar .card img{
+        height: 300px;
+    }
+}
 @media(max-width:768px){
     body{
         background-color: white;
@@ -172,8 +183,15 @@ nav .profile a{
     }
     .maincontent{
         grid-template-columns: 1fr;
+        margin-left: 0;
+        margin-right: 0;
     }
     .trightbar{
         display: flex;
+    }
+}
+@media(max-width:550px){
+    .maincontent .leftbar .card img{
+        height: 250px;
     }
 }
