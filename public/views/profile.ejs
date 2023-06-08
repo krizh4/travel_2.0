@@ -52,8 +52,10 @@
                     <img src="<%= data[1][i].media[0].link %>" alt="image">
                     <div class="posttxt">
                         <h3><%= data[1][i].title %></h3>
-                        <p><%= data[1][i].desc %></p>
-                        <button>Delete</button>
+                        <p><%= data[1][i].desc %></p></a>
+                        <form action="delete?postId=<%= data[1][i]._id %>" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
                     </div>
                 </div>
             </a>

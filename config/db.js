@@ -47,7 +47,7 @@ async function getProfileData(req, res, next) {
 
     // console.log(results);
     req.data = results;
-    console.log(results);
+    // console.log(results);
     next();
   } catch (err) {
     console.error(err);
@@ -133,6 +133,17 @@ async function changeVerified(userId) {
   return updatedUser
 }
 
+async function deletePost(userId, postId) { //useriD = email, postId = postID
+  const postObj = await SiteModels.Post.findOne({ _id: postId })
+  console.log(postObj._id);
+  console.log(postObj);
+  if (userId == postObj.author.email){
+    const deletedPost = await UserModels.User.deleteOne({_id: `new ObjectId(${postObj._id})`});
+    return deletedPost
+  } else {
+    res.status(401).send('only user who made thepost can delete the post')
+  }
+}
 
 module.exports = {
   run,
@@ -140,6 +151,7 @@ module.exports = {
   createPost,
   getOne,
   getProfileData,
+  deletePost,
   createUser, // For Auth
   checkUser,  // For Auth
   changeVerified, // For Auth

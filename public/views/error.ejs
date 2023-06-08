@@ -9,8 +9,9 @@
 <body>
     <div class="popup" id="popup">
         <h2>Travel 2.0</h2><br>
-        <h3>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h3><br>
-        <a href="javascript:history.go(-1)">OK, Go back</a>
+        <h3><%= data.message %></h3><br>
+        <a href="<%= data.goto %>">Login</a>
+        <a href="javascript:history.go(-1)">Go back</a>
     </div>
 </body>
 </html>

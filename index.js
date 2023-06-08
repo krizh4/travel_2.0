@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { run, getData, createPost, getOne, getProfileData } = require('./config/db');
+const { run, getData, createPost, getOne, getProfileData, deletePost } = require('./config/db');
 const { register, login, setVerified, verifyEmail } = require('./config/auth');
 
 const app = express()
@@ -14,7 +14,7 @@ const port = process.env.PORT || 8000
 
 app.engine('html', require('ejs').renderFile);
 app.use(express.static(__dirname + '/public/static'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -25,9 +25,9 @@ run()
 app.get('/admin', checkUser, checkVerified, checkAdmin, (req, res) => {
   res.sendFile(__dirname + '/public/views/admin.html')
 }).post('/admin/:command/:type', (req, res) => {
-  if (req.params.command == 'add'){
-    if (req.params.type == 'post'){
-    } else if (req.params.type == 'place'){
+  if (req.params.command == 'add') {
+    if (req.params.type == 'post') {
+    } else if (req.params.type == 'place') {
       console.log("place");
     } else {
       console.log("Error");
@@ -36,10 +36,10 @@ app.get('/admin', checkUser, checkVerified, checkAdmin, (req, res) => {
 })
 
 // Index Route
-app.get('/', getData,(req, res) => {
+app.get('/', getData, (req, res) => {
   req.refresh = 1;
   data = req.data
-  res.render(__dirname + '/public/views/index.ejs', {data})
+  res.render(__dirname + '/public/views/index.ejs', { data })
 })
 
 // Individual Post Route
@@ -60,13 +60,13 @@ app.get('/explore', (req, res) => {
 
 app.get('/profile', checkUser, getProfileData, (req, res) => {
   data.push(req.data);
-  console.log(data);
+  // console.log(data);
   res.render('../public/views/profile.ejs', data);
 })
 
 app.get('/register', (req, res) => {
   res.sendFile(__dirname + '/public/views/register.html')
-}).post('/register', register ,(req, res) => {
+}).post('/register', register, (req, res) => {
   res.send("Registration Succesful <a href='/'>Go Back to Home</a>")
 })
 
@@ -83,7 +83,7 @@ app.post('/logout', (req, res) => {
 
 app.get('/newpost', checkAdmin, (req, res) => {
   res.sendFile(__dirname + '/public/views/addpost.html')
-}).post('/newpost', checkAdmin, createPost, (req,res) => {
+}).post('/newpost', checkAdmin, createPost, (req, res) => {
   res.send("Post Created!")
 })
 
@@ -98,7 +98,7 @@ app.get('/verify', async (req, res) => {
 
   // Compare the token with the stored hashed token
   const isTokenValid = (verToken == storedHashedToken);
-  console.log(verToken, storedHashedToken);
+  // console.log(verToken, storedHashedToken);
 
   if (isTokenValid) {
     // Perform necessary database updates or business logic
@@ -121,24 +121,50 @@ app.get('/email-verification', async (req, res) => {
   res.send("Please Check Your Emails")
 })
 
+app.post('/delete', checkUser, async (req, res) => {
+  let token = req.cookies.token;
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET)
+  const userId = decoded.email
+  const { postId } = req.query;
+  try {
+    deletedPost = await deletePost(userId, postId);
+    res.header(200).send('Post Deleted Succesfully')
+  } catch (error) {
+    res.header(401).send('You dont Have power to delete Items')
+    console.log(`error happend while deleting ${error}`);
+  }
+})
+
 
 // Middleware Functions
 // Check if user is a Admin
 function checkAdmin(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    res.status(401).send('Unauthorized <a href="/login">Go login<a>');
+    data = {
+      message: { anc: "You are not Logged in, Please login.", text: "Login" },
+      goto: "/login"
+    }
+    res.status(401).render(__dirname + '/public/views/error.ejs', data);
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       if (decoded.isAdmin) {
         next()
       } else {
-        res.status(401).send('Unauthorized (Uba admin nemei)');
+        data = {
+          message: "You are not a Admin",
+          goto: { anc: "/requestAdmin", text: "Request Admin" },
+        }
+        res.status(401).render(__dirname + '/public/views/error.ejs', data);
       }
     } catch (error) {
       console.error('Error during token verification:', error);
-      res.status(401).send('Unauthorized');
+      data = {
+        message: "Invalid User, Login again",
+        goto: { anc: "/login", text: "Login Again" },
+      }
+      res.status(401).render(__dirname + '/public/views/error.ejs', data);
     }
   }
 }
@@ -147,7 +173,12 @@ function checkAdmin(req, res, next) {
 async function checkUser(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    res.status(401).send('Unauthorized <a href="/login">Go login<a> (Log in Wela idpn)');
+    data = {
+      message: "You are not Logged in, Please login.",
+      goto: "/login"
+    }
+    res.status(401).render(__dirname + '/public/views/error.ejs', data);
+    // res.status(401).send('Unauthorized <a href="/login">Go login<a> (Log in Wela idpn)');
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -168,7 +199,11 @@ async function checkUser(req, res, next) {
 async function checkVerified(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    res.status(401).send('Unauthorized <a href="/login">Go login<a>');
+    data = {
+      message: "You are not Logged in, Please login.",
+      goto: "/login"
+    }
+    res.status(401).render(__dirname + '/public/views/error.ejs', data);
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
