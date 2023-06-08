@@ -126,13 +126,20 @@ app.post('/delete', checkUser, async (req, res) => {
   const decoded = await jwt.verify(token, process.env.JWT_SECRET)
   const userId = decoded.email
   const { postId } = req.query;
+
+  console.log(userId, postId);
+
   try {
-    deletedPost = await deletePost(userId, postId);
+    deletedPost = await deletePost(userId, postId, res);
     res.header(200).send('Post Deleted Succesfully')
   } catch (error) {
     res.header(401).send('You dont Have power to delete Items')
     console.log(`error happend while deleting ${error}`);
   }
+})
+
+app.get('/subscribe', (req, res) => {
+  res.send(<center><h1>working on newsletter</h1></center>)
 })
 
 

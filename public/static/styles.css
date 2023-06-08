@@ -18,6 +18,11 @@ nav .logo{
     text-shadow: 1px 1px 1px black;
 }
 
+nav .logo img {
+    height: 60px;
+    mix-blend-mode:exclusion;
+}
+
 nav .links ul{
     text-align: center;
     margin-top: 15px;
@@ -127,7 +132,7 @@ nav .profile a{
 }
 .rightbar .cards .card{
     width: 90%;
-    height: 150px;
+    height: 75px;
     background-color: #c4c4c4;
     margin-bottom: 4%;
     border-radius: 10px;

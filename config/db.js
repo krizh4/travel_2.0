@@ -133,15 +133,16 @@ async function changeVerified(userId) {
   return updatedUser
 }
 
-async function deletePost(userId, postId) { //useriD = email, postId = postID
+async function deletePost(userId, postId, res) { //useriD = email, postId = postID
   const postObj = await SiteModels.Post.findOne({ _id: postId })
-  console.log(postObj._id);
-  console.log(postObj);
+  // console.log(postObj._id);
   if (userId == postObj.author.email){
-    const deletedPost = await UserModels.User.deleteOne({_id: `new ObjectId(${postObj._id})`});
+    const deletedPost = await SiteModels.Post.findByIdAndRemove(postObj._id);
+    // const deletedPost = await UserModels.User.deleteOne({_id: postId});
+    // deletedPost = "1";
     return deletedPost
   } else {
-    res.status(401).send('only user who made thepost can delete the post')
+    res.status(401).send('only user who made the post can delete the post')
   }
 }
 
